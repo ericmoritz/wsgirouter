@@ -1,6 +1,10 @@
-wsgirouter is a dead simple WSGI dispatcher.  It routes a URL to a WSGI application. `wsgirouter.Route` is itself a WSGI
-application, so you can apply WSGI middleware to it.
+wsgirouter is a dead simple WSGI dispatcher.  It routes a URL to a
+WSGI application. `wsgirouter.Route` is itself a WSGI application, so
+you can apply WSGI middleware to it.
 
+I built this project because no WSGI URL dispatcher seemed to do what
+I wanted.  They were either didn't use WSGI apps directly, too complex
+(Routes) or didn't support URL variables (urlrelay, wfront).
 
 Usage
 ======

@@ -32,13 +32,15 @@ class RouterTest(unittest.TestCase):
         self.router = router
 
     def test_resolve(self):
-        app, match, info = self.router.resolve("/app1/slug1/")
+        result = self.router.resolve("/app1/slug1/")
+        app, match = result.app, result.match
         kwargs = match.groupdict()
 
         self.assertEqual(app, app1)
         self.assertEqual({'slug': "slug1"}, kwargs)
 
-        app, match, info = self.router.resolve("/app2/slug2/")
+        result = self.router.resolve("/app2/slug2/")
+        app, match = result.app, result.match
         kwargs = match.groupdict()
         self.assertEqual(app, app2)
         self.assertEqual({'slug': "slug2"}, kwargs)
@@ -67,3 +69,41 @@ class RouterTest(unittest.TestCase):
         self.assertEqual(environ['router.args'],
                          ('slug3',))
 
+
+class TestComplexRouting(unittest.TestCase):
+    def setUp(self):
+        front = Router()
+
+        # Create two seperate routes for nested routes
+        route1 = Router()
+        route1.route("^/app1/(?P<slug>.+)/")(app1)
+
+        route2 = Router()
+        route2.route("^/app2/(?P<slug>.+)/")(app2)
+        
+        front.route(r"^/route1")(route1)
+        front.route(r"^/route2")(route2)
+
+        self.front = front
+
+    def test_nested_routes(self):
+        environ = {}
+
+
+        # Call front with the two nested URLs
+
+        environ = {}
+        environ['PATH_INFO'] = "/route1/app1/slug1/"
+        result = self.front(environ, lambda s,h: None)
+        self.assertEqual(['app1'], result)
+        self.assertEqual(environ['router.kwargs'],
+                         {'slug': 'slug1'})
+        self.assertEqual(environ['router.args'], ())
+
+        environ = {}
+        environ['PATH_INFO'] = "/route2/app2/slug2/"
+        result = self.front(environ, lambda s,h: None)
+        self.assertEqual(['app2'], result)
+        self.assertEqual(environ['router.kwargs'],
+                         {'slug': 'slug2'})
+        self.assertEqual(environ['router.args'], ())

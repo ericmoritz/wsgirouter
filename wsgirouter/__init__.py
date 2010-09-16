@@ -66,8 +66,7 @@ class Router(object):
                 kwargs = {}
                 args = result.match.groups()
 
-            environ['router.kwargs'] = kwargs
-            environ['router.args'] = args
+            environ['wsgiorg.routing_args'] = (args, kwargs)
 
             if isinstance(result.app, Router):
                 return result.app(environ, start_response, path=result.rest)

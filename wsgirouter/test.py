@@ -76,10 +76,8 @@ class RouterTest(unittest.TestCase):
         result = self.router(environ, lambda s,h: None)
         
         self.assertEqual(["app1"], result)
-        self.assertEqual(environ['router.kwargs'],
-                         {'slug': "slug1"})
-        self.assertEqual(environ['router.args'],
-                         ())
+        self.assertEqual(environ['wsgiorg.routing_args'],
+                         ((), {'slug': "slug1"}))
 
         environ = {}
         environ['HTTP_METHOD'] = "GET"
@@ -88,10 +86,8 @@ class RouterTest(unittest.TestCase):
         result = self.router(environ, lambda s,h: None)
         
         self.assertEqual(["app3"], result)
-        self.assertEqual(environ['router.kwargs'],
-                         {})
-        self.assertEqual(environ['router.args'],
-                         ('slug3',))
+        self.assertEqual(environ['wsgiorg.routing_args'],
+                         (('slug3', ), {}))
 
 
         environ = {}
@@ -101,10 +97,8 @@ class RouterTest(unittest.TestCase):
         result = self.router(environ, lambda s,h: None)
         
         self.assertEqual(["save"], result)
-        self.assertEqual(environ['router.kwargs'],
-                         {})
-        self.assertEqual(environ['router.args'],
-                         ('slug3',))
+        self.assertEqual(environ['wsgiorg.routing_args'],
+                         (('slug3', ), {}))
 
 
 class TestComplexRouting(unittest.TestCase):
@@ -134,15 +128,13 @@ class TestComplexRouting(unittest.TestCase):
         environ['PATH_INFO'] = "/route1/app1/slug1/"
         result = self.front(environ, lambda s,h: None)
         self.assertEqual(['app1'], result)
-        self.assertEqual(environ['router.kwargs'],
-                         {'slug': 'slug1'})
-        self.assertEqual(environ['router.args'], ())
+        self.assertEqual(environ['wsgiorg.routing_args'],
+                         ((), {'slug': 'slug1'}))
 
         environ = {}
         environ['HTTP_METHOD'] = "GET"
         environ['PATH_INFO'] = "/route2/app2/slug2/"
         result = self.front(environ, lambda s,h: None)
         self.assertEqual(['app2'], result)
-        self.assertEqual(environ['router.kwargs'],
-                         {'slug': 'slug2'})
-        self.assertEqual(environ['router.args'], ())
+        self.assertEqual(environ['wsgiorg.routing_args'],
+                         ((), {'slug': 'slug2'}))

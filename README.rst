@@ -57,3 +57,33 @@ Here is an example of nesting routes::
   application = front
 
 
+Environment variables
+======================
+wsgirouter adds two variables to the environment for called `router.kwargs`,
+and `router.args`.  These are the arguments and keyword arguments found when
+matching the inner most URL pattern.
+
+
+Caveat
+=======
+You must apply the route decorator on the outside of your decorator chain because the route decorator can only know about the function it applies to, it 
+is unaware of any decorators you apply to the function after the route is
+applied.  Doing this is correct::
+
+  @router.route("^/path/")
+  @my_decor
+  def app(environ, start_response):
+      # whatever
+
+This is incorrect::
+
+  @my_decor
+  @router.route("^/path/")
+  def app(environ, start_response):
+      # whatever
+
+In the case above, @my_decor will never be called because it wraps the
+application after the router is registered with the application.
+
+
+

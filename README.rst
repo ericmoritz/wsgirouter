@@ -15,7 +15,7 @@ The usage is simple::
      start_response("200 OK", [])
      return ["Some content"]
 
-  @route.route("^/entries/(.*)/"):
+  @router.route("^/entries/(.*)/"):
   def entry_detail(environ, start_response):
      args = environ['router.args']
      slug = args[0]
@@ -23,3 +23,16 @@ The usage is simple::
      # .. lookup blog entry
      start_response("200 OK", [])
      return ["Some content"]
+
+  @router.route("^/entries/tags/(?P<tags>.+)/")
+  def entries_by_tag(environ, start_response):
+     kwargs = environ['router.kwargs']
+     tags = kwargs['tags']
+
+     # ... Do your magic
+     start_response("200 OK", [])
+     return ["Some content"]
+     
+
+  application = router
+

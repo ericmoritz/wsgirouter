@@ -36,3 +36,20 @@ The usage is simple::
 
   application = router
 
+
+Complex Example
+================
+Here is an example of nesting routes::
+
+  from blog import router as blog_router
+  from wiki import router as wiki_router
+  from wsgirouter import Router
+
+  front = Router()
+
+  front.route("^/blog")(blog_router)
+  front.route("^/wiki")(wiki_router)
+
+  application = front
+
+

@@ -46,13 +46,12 @@ class Router(object):
         raise RouteNotFound(self, tried)
 
     def path_info(self, environ):
-        if "router.path" in environ:
-            return environ['router.path']
-        else:
-            return environ['PATH_INFO']
+        return environ['PATH_INFO']
 
-    def __call__(self, environ, start_response):
-        path = self.path_info(environ)
+    def __call__(self, environ, start_response, path=None):
+        if path is None:
+            path = self.path_info(environ)
+
         result = self.resolve(path)
 
         if result.app is not None:
@@ -66,6 +65,8 @@ class Router(object):
 
             environ['router.kwargs'] = kwargs
             environ['router.args'] = args
-            environ['router.path'] = result.rest
 
-            return result.app(environ, start_response)
+            if isinstance(result.app, Router):
+                return result.app(environ, start_response, path=result.rest)
+            else:
+                return result.app(environ, start_response)

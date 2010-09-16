@@ -1,0 +1,3 @@
+build
+wsgirouter.egg-info
+*.pyc

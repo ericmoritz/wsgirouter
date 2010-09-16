@@ -19,29 +19,30 @@ class Router(object):
     def __init__(self):
         self.rules = []
 
-    def route(self, pat):
+    def route(self, pat, methods=["GET"]):
         def decor(application):
             regex = re.compile(pat)
             self.rules.append((
-                    (regex, application), # for working
+                    (regex, methods, application), # for working
                     (pat,) # for reporting
                     ))
 
             return application
         return decor
 
-    def resolve(self, path):
+    def resolve(self, method, path):
         tried = []
         original_path = path
-        for (regex, app), info in self.rules:
-            match = regex.match(path)
+        for (regex, methods, app), info in self.rules:
+            if method in methods:
+                match = regex.match(path)
 
-            if match:
-                # Strip off the matched part of the path
-                rest = regex.sub("", path)
-                return RouteMatch(app, match, rest, info)
-            else:
-                tried.append({'path': path, 'pattern': info[0]})
+                if match:
+                    # Strip off the matched part of the path
+                    rest = regex.sub("", path)
+                    return RouteMatch(app, match, rest, info)
+                else:
+                    tried.append({'method': method, 'path': path, 'pattern': info[0], 'methods': methods})
 
         raise RouteNotFound(self, tried)
 
@@ -49,10 +50,12 @@ class Router(object):
         return environ['PATH_INFO']
 
     def __call__(self, environ, start_response, path=None):
+        method = environ['HTTP_METHOD']
+
         if path is None:
             path = self.path_info(environ)
 
-        result = self.resolve(path)
+        result = self.resolve(method, path)
 
         if result.app is not None:
             kwargs = result.match.groupdict()

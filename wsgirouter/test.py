@@ -70,7 +70,7 @@ class RouterTest(unittest.TestCase):
     def test_call(self):
         ## Call the WSGI app using a path tha t
         environ = {}
-        environ['HTTP_METHOD'] = "GET"
+        environ['REQUEST_METHOD'] = "GET"
         environ['PATH_INFO'] = "/app1/slug1/"
 
         result = self.router(environ, lambda s,h: None)
@@ -80,7 +80,7 @@ class RouterTest(unittest.TestCase):
                          ((), {'slug': "slug1"}))
 
         environ = {}
-        environ['HTTP_METHOD'] = "GET"
+        environ['REQUEST_METHOD'] = "GET"
         environ['PATH_INFO'] = "/app3/slug3/"
 
         result = self.router(environ, lambda s,h: None)
@@ -91,7 +91,7 @@ class RouterTest(unittest.TestCase):
 
 
         environ = {}
-        environ['HTTP_METHOD'] = "PUT"
+        environ['REQUEST_METHOD'] = "PUT"
         environ['PATH_INFO'] = "/app3/slug3/"
 
         result = self.router(environ, lambda s,h: None)
@@ -124,7 +124,7 @@ class TestComplexRouting(unittest.TestCase):
         # Call front with the two nested URLs
 
         environ = {}
-        environ['HTTP_METHOD'] = "GET"
+        environ['REQUEST_METHOD'] = "GET"
         environ['PATH_INFO'] = "/route1/app1/slug1/"
         result = self.front(environ, lambda s,h: None)
         self.assertEqual(['app1'], result)
@@ -132,7 +132,7 @@ class TestComplexRouting(unittest.TestCase):
                          ((), {'slug': 'slug1'}))
 
         environ = {}
-        environ['HTTP_METHOD'] = "GET"
+        environ['REQUEST_METHOD'] = "GET"
         environ['PATH_INFO'] = "/route2/app2/slug2/"
         result = self.front(environ, lambda s,h: None)
         self.assertEqual(['app2'], result)

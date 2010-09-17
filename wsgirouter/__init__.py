@@ -50,7 +50,7 @@ class Router(object):
         return environ['PATH_INFO']
 
     def __call__(self, environ, start_response, path=None):
-        method = environ['HTTP_METHOD']
+        method = environ['REQUEST_METHOD']
 
         if path is None:
             path = self.path_info(environ)

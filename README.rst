@@ -57,12 +57,13 @@ Here is an example of nesting routes::
   application = front
 
 
-Environment variables
+Environment variable
 ======================
-wsgirouter adds two variables to the environment for called `router.kwargs`,
-and `router.args`.  These are the arguments and keyword arguments found when
-matching the inner most URL pattern.
+wsgirouter adds a variables to the environment for called `wsgiorg.routing_args`,
+This is the standard_ variable to store arguments and keyword arguments found when
+matching the inner most URL pattern.  
 
+.. _standard: http://wsgi.org/wsgi/Specifications/routing_args
 
 Caveat
 =======

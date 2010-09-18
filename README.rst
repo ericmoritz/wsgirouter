@@ -61,7 +61,7 @@ Environment variable
 ======================
 wsgirouter adds a variables to the environment for called `wsgiorg.routing_args`,
 This is the standard_ variable to store arguments and keyword arguments found when
-matching the inner most URL pattern.  
+matching URL patterns.
 
 .. _standard: http://wsgi.org/wsgi/Specifications/routing_args
 

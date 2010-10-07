@@ -89,5 +89,5 @@ application after the router is registered with the application.
 
 Update
 =======
-It's come to my attention the Routes has a `WSGI middleware<http://routes.groovie.org/porting.html>`_ that would satisfy my complaint that it didn't use WSGI directly. It also supports "wsgiorg.routing_args".  I would pretty trivial to interface Routes the way I have with wsgirouter.  wsgirouter is still most likely the simplest implementation that
+It's come to my attention the Routes has a `WSGI middleware <http://routes.groovie.org/porting.html>`_ that would satisfy my complaint that it didn't use WSGI directly. It also supports "wsgiorg.routing_args".  I would pretty trivial to interface Routes the way I have with wsgirouter.  wsgirouter is still most likely the simplest implementation that
 supports my three goals.  Routes supports two of those goals (it's still complex)  However with Routes' complexity comes robustness.  Use your own judgment.
